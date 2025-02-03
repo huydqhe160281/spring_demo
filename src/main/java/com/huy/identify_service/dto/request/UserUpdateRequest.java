@@ -1,42 +1,31 @@
 package com.huy.identify_service.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDate;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class UserUpdateRequest {
-    private String password;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
+    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must contain at least one uppercase letter, one lowercase letter, and one number")
+    String password;
 
-    public String getPassword() {
-        return password;
-    }
+    @NotBlank(message = "First name is required")
+    String firstName;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @NotBlank(message = "Last name is required")
+    String lastName;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+    @NotBlank(message = "Date of birth is required")
+    LocalDate dob;
 }

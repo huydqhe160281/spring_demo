@@ -20,7 +20,7 @@ public class UserController {
     @PostMapping
         //    @Valid to validate request body
     ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>(StatusCode.OK, "Create user successfully", userService.createUser(request));
+        ApiResponse<User> apiResponse = new ApiResponse<>(StatusCode.CREATED, "Create user successfully", userService.createUser(request));
         return apiResponse;
     }
 
@@ -35,8 +35,9 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable String userId, @RequestBody UserCreationRequest request) {
-        return userService.updateUser(userId, request);
+    ApiResponse<User> updateUser(@PathVariable String userId, @RequestBody UserCreationRequest request) {
+        ApiResponse<User> apiResponse = new ApiResponse<>(StatusCode.OK, "Update user successfully", userService.updateUser(userId, request));
+        return apiResponse;
     }
 
     @DeleteMapping("/{userId}")
