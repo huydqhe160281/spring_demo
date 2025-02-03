@@ -4,6 +4,7 @@ package com.huy.identify_service.exception;
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(0, "Uncategorized exception"),
     USERNAME_EXISTED(1001, "Username existed"),
+    USER_NOT_FOUND(1002, "User not found"),
     ;
 
     private int code;

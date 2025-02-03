@@ -1,6 +1,7 @@
 package com.huy.identify_service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -26,6 +27,6 @@ public class UserUpdateRequest {
     @NotBlank(message = "Last name is required")
     String lastName;
 
-    @NotBlank(message = "Date of birth is required")
+    @NotNull(message = "Date of birth is required")
     LocalDate dob;
 }

@@ -40,6 +40,5 @@ public class UserCreationRequest {
     @NotBlank(message = "Last name is required")
     String lastName;
 
-    @NotBlank(message = "Date of birth is required")
     LocalDate dob;
 }
