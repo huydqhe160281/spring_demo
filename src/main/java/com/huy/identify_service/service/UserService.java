@@ -2,6 +2,8 @@ package com.huy.identify_service.service;
 
 import com.huy.identify_service.dto.request.UserCreationRequest;
 import com.huy.identify_service.entity.User;
+import com.huy.identify_service.exception.AppException;
+import com.huy.identify_service.exception.ErrorCode;
 import com.huy.identify_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,9 @@ public class UserService {
         User user = new User();
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+//           bắt lỗi khác những lỗi đã default sẵn
+//            throw new RuntimeException("Username existed");
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
 
         user.setUsername(request.getUsername());
@@ -39,7 +43,7 @@ public class UserService {
     }
 
     public User updateUser(String userId, UserCreationRequest request) {
-//        check tồn tại user
+//      check if user exists
         User user = getUserById(userId);
 
         user.setUsername(request.getUsername());

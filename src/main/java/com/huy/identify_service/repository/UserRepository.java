@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUsername(String username);
+    //    check if username exists
+    boolean existsByUsername(String username); // auto generate query by spring data jpa to check if username exists
+
 }

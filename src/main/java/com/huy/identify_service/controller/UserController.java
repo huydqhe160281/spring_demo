@@ -1,8 +1,11 @@
 package com.huy.identify_service.controller;
 
+import com.huy.identify_service.constants.StatusCode;
+import com.huy.identify_service.dto.request.ApiResponse;
 import com.huy.identify_service.dto.request.UserCreationRequest;
 import com.huy.identify_service.entity.User;
 import com.huy.identify_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +18,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request) {
-        return userService.createUser(request);
+        //    @Valid to validate request body
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<User> apiResponse = new ApiResponse<>(StatusCode.OK, "Create user successfully", userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping
