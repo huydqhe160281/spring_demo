@@ -5,6 +5,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(0, "Uncategorized exception"),
     USERNAME_EXISTED(1001, "Username existed"),
     USER_NOT_FOUND(1002, "User not found"),
+    USER_NOT_EXISTED(1003, "User not existed"),
     ;
 
     private int code;
