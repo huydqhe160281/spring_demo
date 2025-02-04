@@ -4,6 +4,7 @@ import com.huy.identify_service.dto.request.AuthenticationRequest;
 import com.huy.identify_service.dto.request.IntrospectRequest;
 import com.huy.identify_service.dto.response.AuthenticationResponse;
 import com.huy.identify_service.dto.response.IntrospectResponse;
+import com.huy.identify_service.entity.User;
 import com.huy.identify_service.exception.AppException;
 import com.huy.identify_service.exception.ErrorCode;
 import com.huy.identify_service.repository.UserRepository;
@@ -21,12 +22,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Slf4j
 @Service
@@ -68,7 +72,7 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        var token = generateToken(user.getUsername());
+        var token = generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -76,14 +80,14 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String username) {
+    private String generateToken(User user) {
 //        JWSHeader is the first part of the JWT token
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
 //        JWTClaimsSet is the second part of the JWT token
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
 //                subject is the username
-                .subject(username)
+                .subject(user.getUsername())
 //                issuer is the service that issues the token
                 .issuer("identify-service")
 //                issueTime is the time the token is issued
@@ -91,7 +95,7 @@ public class AuthenticationService {
 //                expirationTime is the time the token is expired
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
 //                claim is the information of the user
-                .claim("role", "user")
+                .claim("scope", buildingScope(user))
                 .build();
 
 
@@ -109,4 +113,11 @@ public class AuthenticationService {
         }
     }
 
+    private String buildingScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
+            user.getRoles().forEach(role -> stringJoiner.add(role));
+        }
+        return stringJoiner.toString();
+    }
 }
