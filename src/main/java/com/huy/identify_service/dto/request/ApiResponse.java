@@ -1,12 +1,14 @@
 package com.huy.identify_service.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 
 // Format dữ liệu trả về từ api
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 // JsonInclude.Include.NON_NULL: chỉ include các field không null
 
+@Builder
 public class ApiResponse<T> {
     // T is generic type là kiểu dữ liệu của data trả về từ api
     private int code;

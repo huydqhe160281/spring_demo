@@ -20,7 +20,6 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-        // @Valid to validate request body
     ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
         ApiResponse<User> apiResponse = new ApiResponse<>(StatusCode.CREATED, "Create user successfully", userService.createUser(request));
         return apiResponse;
