@@ -12,20 +12,32 @@ public class GlobalExceptionHandler {
     //    handle all exception and return error code and message
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(new ApiResponse(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode(), ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage(), null));
+        return ResponseEntity.badRequest().body(ApiResponse.builder()
+                .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                .build()
+        );
     }
 
     //    handle app exception and return error code and message
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handleAppException(AppException e) {
         ErrorCode errorCode = e.getErrorCode();
-        return ResponseEntity.badRequest().body(new ApiResponse(errorCode.getCode(), errorCode.getMessage(), null));
+        return ResponseEntity.badRequest().body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build()
+        );
     }
 
     //    handle validation exception and return error code and message
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 //        return mgs and status code
-        return ResponseEntity.badRequest().body(new ApiResponse(StatusCode.BAD_REQUEST, e.getBindingResult().getFieldError().getDefaultMessage(), null));
+        return ResponseEntity.badRequest().body(ApiResponse.builder()
+                .code(StatusCode.BAD_REQUEST)
+                .message(e.getBindingResult().getFieldError().getDefaultMessage())
+                .build()
+        );
     }
 }
