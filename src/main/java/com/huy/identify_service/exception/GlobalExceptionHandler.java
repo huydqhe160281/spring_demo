@@ -3,6 +3,7 @@ package com.huy.identify_service.exception;
 import com.huy.identify_service.constants.StatusCode;
 import com.huy.identify_service.dto.request.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +24,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handleAppException(AppException e) {
         ErrorCode errorCode = e.getErrorCode();
-        return ResponseEntity.badRequest().body(ApiResponse.builder()
+        return ResponseEntity
+                .status(errorCode.getHttpStatusCode())
+                .body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException e) {
+        ErrorCode errorCode = ErrorCode.FORBIDDEN;
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build()
